@@ -160,4 +160,1271 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .progress-head .right{margin-left:auto;display:flex;gap:14px}
 .progress-wrap{width:100%;height:10px;background:var(--inset);border:1px solid var(--border);border-radius:5px;overflow:hidden;position:relative}
 .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .15s linear;box-shadow:0 0 12px rgba(0,229,160,.5)}
-.progress-wrap::after{
+.progress-wrap::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 16px,rgba(7,11,16,.55) 16px 17px);pointer-events:none}
+.progress-wrap.ramp .progress-bar{background:linear-gradient(90deg,#c77f00,var(--warn))}
+
+/* ── stats ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px}
+.stat{background:var(--inset);border:1px solid var(--border);padding:10px 12px;border-radius:6px;min-width:0;transition:border-color .3s}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-val{font-size:19px;font-weight:400;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-sub{font-size:10.5px;color:var(--dim);margin-top:1px}
+.ok{color:var(--accent)} .err{color:var(--danger)} .warn-c{color:var(--warn)}
+.blue-c{color:var(--blue)} .purple-c{color:var(--purple)} .orange-c{color:var(--orange)}
+.status-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.schip{font-size:11.5px;padding:3px 11px;border-radius:999px;border:1px solid var(--border);background:var(--inset);color:var(--muted)}
+.schip.c2{color:var(--accent);border-color:rgba(0,229,160,.4)}
+.schip.c3{color:var(--blue);border-color:rgba(56,182,255,.4)}
+.schip.c4{color:var(--warn);border-color:rgba(255,176,46,.4)}
+.schip.c5,.chip-bad{color:var(--danger);border-color:rgba(255,77,94,.45)}
+
+/* ── gráficas ── */
+.charts{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}
+@media (max-width:900px){.charts{grid-template-columns:1fr}}
+.chart-block h3,.curve-block h3{font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.legend{display:inline-flex;gap:12px;margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:0;text-transform:none}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.chart-box{height:220px;background:var(--inset);border:1px solid var(--border);border-radius:6px;position:relative;overflow:hidden}
+.chart-box.tall{height:240px}
+.chart-box canvas{display:block;width:100%;height:100%}
+
+/* ── capacidad ── */
+.verdict{display:flex;gap:14px;align-items:center;background:var(--inset);border:1px solid var(--border);border-radius:6px;padding:13px 16px;margin-bottom:14px;transition:border-color .4s}
+.verdict svg{width:30px;height:30px;flex:none;color:var(--dim)}
+.verdict b{display:block;font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.12em;color:var(--muted)}
+.verdict span{font-size:12px;color:var(--muted)}
+#levelChip{font-size:11.5px;color:var(--warn);letter-spacing:.14em}
+.tbl-wrap{max-height:240px;overflow:auto;border:1px solid var(--border);border-radius:6px;background:var(--inset);margin-top:14px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;text-align:right;padding:8px 12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel2)}
+th:first-child,td:first-child{text-align:left}
+td{padding:6px 12px;border-bottom:1px solid rgba(30,42,58,.5);text-align:right;color:var(--text);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr.break-row td{background:rgba(255,77,94,.06)}
+.empty-row td{text-align:center;color:var(--dim);padding:16px}
+
+/* ── CLI ── */
+.cli-note{font-size:12px;color:var(--muted);background:var(--inset);border:1px solid var(--border);border-left:3px solid var(--warn);border-radius:5px;padding:9px 13px;margin-bottom:12px}
+.cli-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.cli-tab{font-family:var(--mono);font-size:12px;padding:6px 14px;border-radius:5px;background:var(--panel2);color:var(--muted);border:1px solid var(--border)}
+.cli-tab.active{color:var(--accent);border-color:var(--accent);background:rgba(0,229,160,.07);box-shadow:0 0 10px rgba(0,229,160,.12)}
+.cli-head{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+#cliName{font-size:12px;color:var(--warn)}
+.cli-head .btn{margin-left:auto}
+pre#cliCode{background:var(--inset);border:1px solid var(--border);border-radius:6px;padding:14px;font-size:12.5px;line-height:1.65;color:#c6d4e6;max-height:300px;overflow:auto;white-space:pre;tab-size:2}
+.tok-c{color:var(--dim);font-style:italic}.tok-s{color:var(--warn)}.tok-f{color:var(--blue)}.tok-n{color:var(--accent)}.tok-k{color:var(--purple)}
+
+/* ── registro ── */
+.log-tools{display:flex;gap:7px;margin-left:auto;flex-wrap:wrap}
+#logBody{background:#05080c;border:1px solid var(--border);border-radius:6px;padding:10px 13px;height:230px;overflow-y:auto;font-size:12.5px;color:var(--muted)}
+.log-line{display:flex;gap:9px;padding:2px 0;animation:logIn .2s ease}
+@keyframes logIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.lt{color:var(--dim);flex:none}
+.lm{word-break:break-word;min-width:0}
+.log-ok .lm{color:var(--accent)} .log-warn .lm{color:var(--warn)} .log-err .lm{color:var(--danger)} .log-info .lm{color:var(--blue)}
+.report-row{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.report-row p{font-size:11.5px;color:var(--dim);flex:1;min-width:180px}
+
+/* ── banner / footer / toasts ── */
+.banner{display:none;font-size:12.5px;color:var(--warn);background:rgba(255,176,46,.07);border:1px solid rgba(255,176,46,.4);border-radius:6px;padding:11px 15px;margin-bottom:16px}
+.banner.show{display:block}
+footer{border-top:1px solid var(--border);margin-top:8px;padding-top:16px;display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--dim)}
+footer .keys{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+kbd{background:var(--panel2);border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;padding:1px 7px;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+#toasts{position:fixed;right:18px;bottom:18px;z-index:120;display:flex;flex-direction:column;gap:9px;max-width:min(360px,calc(100vw - 36px))}
+.toast{display:flex;align-items:center;gap:10px;padding:11px 15px;border-radius:6px;background:var(--panel2);border:1px solid var(--border2);border-left:3px solid var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.6);font-size:13px;opacity:0;transform:translateX(22px);transition:all .3s cubic-bezier(.2,.9,.3,1.15)}
+.toast.in{opacity:1;transform:none}
+.toast.out{opacity:0;transform:translateX(22px)}
+.toast.warn{border-left-color:var(--warn)} .toast.err{border-left-color:var(--danger)} .toast.info{border-left-color:var(--blue)}
+.toast button{margin-left:auto;background:none;color:var(--accent);font-size:12px;text-decoration:underline;padding:2px 4px;flex:none}
+noscript .panel{display:block;margin:40px auto;max-width:600px}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+
+<div class="shell">
+
+  <!-- ══════════ CABECERA ══════════ -->
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <polygon points="16,2 29,9.5 29,22.5 16,30 3,22.5 3,9.5" fill="#0d141d" stroke="#00e5a0" stroke-width="2"/>
+        <path d="M18 8l-7 9h5l-2 7 7-9h-5z" fill="#00e5a0"/>
+      </svg>
+      <div>
+        <h1>SHINRA <i>//</i> LOAD LAB</h1>
+        <small>NGINX CAPACITY BENCHMARK · REACTOR 07</small>
+      </div>
+    </div>
+    <div class="head-right">
+      <span class="badge" id="hostBadge">Origen: <b>detectando…</b></span>
+      <span class="badge" id="protoBadge">PROTO: <b>—</b></span>
+      <button id="sndBtn" class="btn btn-ghost btn-sm" aria-pressed="true" title="Silenciar / activar los avisos sonoros">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
+        <span id="sndLbl">SONIDO ON</span>
+      </button>
+      <span class="led-wrap" id="ledWrap" data-st="idle"><span class="led"></span><span id="ledTxt">EN ESPERA</span></span>
+    </div>
+  </header>
+
+  <div class="banner" id="fileBanner">⚠ Estás abriendo el archivo con <b>file://</b>. El benchmark necesita HTTP: despliega este HTML con nginx (p. ej. <b>docker run -p 8080:80 -v "$PWD:/usr/share/nginx/html:ro" nginx:alpine</b>) y vuelve a cargar. Los comandos CLI de la sección 05 sí funcionan ya.</div>
+
+  <!-- ══════════ 01 · OBJETIVO ══════════ -->
+  <section class="panel" id="pConfig">
+    <div class="p-title"><span class="p-idx">01</span><h2>Objetivo y parámetros</h2><span class="p-meta">MISMO ORIGEN · SIN CACHÉ</span></div>
+    <div class="controls">
+      <div class="fld-path">
+        <label for="path">Ruta objetivo</label>
+        <input type="text" id="path" value="/" placeholder="/ruta/a/probar" autocomplete="off" spellcheck="false" />
+        <div class="presets">
+          <button class="preset" data-path="/">/ · portada</button>
+          <button class="preset" data-path="/healthz">/healthz · sonda</button>
+          <button class="preset" data-path="/api/status">/api/status · estado</button>
+          <button class="preset" data-path="/sector-5-no-existe">/404 · error</button>
+        </div>
+      </div>
+      <div>
+        <label for="method">Método HTTP</label>
+        <select id="method">
+          <option value="HEAD">HEAD (solo cabeceras)</option>
+          <option value="GET" selected>GET (descarga completa)</option>
+          <option value="POST">POST ( APIs )</option>
+        </select>
+      </div>
+      <div>
+        <label for="total">Peticiones totales</label>
+        <input type="number" id="total" value="1000" min="10" max="50000" step="10" />
+      </div>
+      <div>
+        <label for="conc">Hilos concurrentes</label>
+        <input type="number" id="conc" value="50" min="1" max="500" />
+      </div>
+      <div>
+        <label for="timeoutMs">Timeout (ms)</label>
+        <input type="number" id="timeoutMs" value="5000" min="500" max="30000" step="500" />
+      </div>
+      <div>
+        <label for="duration">Duración sostenida (s)</label>
+        <input type="number" id="duration" value="15" min="5" max="120" />
+      </div>
+    </div>
+
+    <div class="opt-row">
+      <label class="tgl" title="Añade un parámetro único por petición para esquivar cachés"><input type="checkbox" id="bustTgl" checked><span class="track"></span><span class="t">ANTI-CACHÉ</span></label>
+      <button id="probeBtn" class="btn btn-ghost btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        PROBAR OBJETIVO
+      </button>
+      <span class="probe-chip" id="probeChip">sin probar</span>
+    </div>
+
+    <div class="proto-note" id="protoNote">Detectando protocolo… el navegador limita la concurrencia real según el protocolo del servidor.</div>
+
+    <div class="ramp-row">
+      <span class="ramp-lbl">▸ PARÁMETROS DE ESCALADA</span>
+      <div><label for="rStart">Conc. inicial</label><input type="number" id="rStart" value="10" min="1" max="100"></div>
+      <div><label for="rFactor">Factor</label>
+        <select id="rFactor"><option value="1.5">×1.5</option><option value="2" selected>×2</option><option value="2.5">×2.5</option></select>
+      </div>
+      <div><label for="rMax">Conc. máxima</label><input type="number" id="rMax" value="400" min="10" max="500" step="10"></div>
+      <div><label for="rErr">Umbral de fallo (%)</label><input type="number" id="rErr" value="2" min="0.5" max="50" step="0.5"></div>
+      <span id="rampPreview"></span>
+    </div>
+
+    <div class="buttons">
+      <button class="btn btn-start" id="btnFixed">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+        LANZAR RÁFAGA FIJA
+      </button>
+      <button class="btn btn-ramp" id="btnRamp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>
+        ESCALADA HASTA ROMPER
+      </button>
+      <button class="btn btn-sustain" id="btnSustain">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
+        SOSTENIDO
+      </button>
+      <button class="btn btn-stop" id="btnStop" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        DETENER
+      </button>
+    </div>
+
+    <div class="progress-head">
+      <span id="modeChip">MODO: —</span>
+      <div class="right"><span id="elapsedTxt">t = 0.0 s</span><span id="etaTxt"></span><span id="progressTxt">0%</span></div>
+    </div>
+    <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressFill"></div></div>
+  </section>
+
+  <!-- ══════════ 02 · TELEMETRÍA ══════════ -->
+  <section class="panel">
+    <div class="p-title"><span class="p-idx">02</span><h2>Telemetría en vivo</h2><span class="p-meta">REFRESCO 250 ms</span></div>
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-label">Completadas</div><div class="stat-val" id="stDone">0 / 0</div></div>
+      <div class="stat"><div class="stat-label">RPS global</div><div class="stat-val ok" id="stRps">0.0</div></div>
+      <div class="stat" title="Peticiones completadas por segundo en los últimos 2 segundos"><div class="stat-label">RPS · 2 s</div><div class="stat-val blue-c" id="stRps2">0.0</div></div>
+      <div class="stat"><div class="stat-label">Éxitos (2xx)</div><div class="stat-val ok" id="stOk">0</div></div>
+      <div class="stat"><div class="stat-label">HTTP ≠ 2xx</div><div class="stat-val warn-c" id="stHttpErr">0</div></div>
+      <div class="stat"><div class="stat-label">Timeouts</div><div class="stat-val err" id="stTo">0</div></div>
+      <div class="stat"><div class="stat-label">Fallos de red</div><div class="stat-val err" id="stNet">0</div></div>
+      <div class="stat"><div class="stat-label">Latencia media</div><div class="stat-val" id="stAvg">—</div></div>
+      <div class="stat" title="Mediana: la mitad de las respuestas fueron más rápidas"><div class="stat-label">P50</div><div class="stat-val blue-c" id="stP50">—</div></div>
+      <div class="stat" title="El 95% de las respuestas fueron más rápidas que este valor"><div class="stat-label">P95</div><div class="stat-val warn-c" id="stP95">—</div></div>
+      <div class="stat" title="El 99% de las respuestas fueron más rápidas que este valor"><div class="stat-label">P99</div><div class="stat-val purple-c" id="stP99">—</div></div>
+      <div class="stat"><div class="stat-label">Mín / Máx</div><div class="stat-val" id="stMinMax">— / —</div></div>
+      <div class="stat" title="Peticiones realmente en vuelo ahora mismo (limitado por el navegador en HTTP/1.1)"><div class="stat-label">En vuelo</div><div class="stat-val ok" id="stFlight">0</div></div>
+      <div class="stat"><div class="stat-label">Transferido</div><div class="stat-val blue-c" id="stBytes">0 B</div><div class="stat-sub" id="stThr">0 B/s</div></div>
+    </div>
+    <div class="status-chips" id="statusChips"><span class="schip">códigos HTTP: —</span></div>
+  </section>
+
+  <!-- ══════════ 03 · GRÁFICAS ══════════ -->
+  <section class="panel">
+    <div class="p-title"><span class="p-idx">03</span><h2>Gráficas de combate</h2><span class="p-meta">MUESTREO 500 ms</span></div>
+    <div class="charts">
+      <div class="chart-block">
+        <h3>Línea temporal
+          <span class="legend">
+            <span><i style="background:var(--accent)"></i>RPS</span>
+            <span><i style="background:var(--warn)"></i>P95 ms</span>
+            <span><i style="background:var(--danger)"></i>errores</span>
+          </span>
+        </h3>
+        <div class="chart-box"><canvas id="tlCanvas"></canvas></div>
+      </div>
+      <div class="chart-block">
+        <h3>Histograma de latencia
+          <span class="legend">
+            <span><i style="background:var(--blue)"></i>P50</span>
+            <span><i style="background:var(--warn)"></i>P95</span>
+          </span>
+        </h3>
+        <div class="chart-box"><canvas id="histCanvas"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 04 · CAPACIDAD ══════════ -->
+  <section class="panel">
+    <div class="p-title"><span class="p-idx">04</span><h2>Curva de capacidad</h2><span class="p-meta" id="levelChip">ESCALADA: —</span></div>
+    <div class="verdict" id="verdictBox">
+      <svg viewBox="0 0 24 24" fill="currentColor" id="verdictStar"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+      <div><b id="verdictName">SIN DATOS</b><span id="verdictDesc">Ejecuta una prueba para obtener el rango del reactor y su capacidad estimada.</span></div>
+    </div>
+    <div class="curve-block">
+      <h3>RPS y P95 por nivel de concurrencia
+        <span class="legend">
+          <span><i style="background:var(--accent)"></i>RPS</span>
+          <span><i style="background:var(--warn)"></i>P95 ms</span>
+          <span><i style="background:var(--danger)"></i>límite</span>
+        </span>
+      </h3>
+      <div class="chart-box tall"><canvas id="curveCanvas"></canvas></div>
+    </div>
+    <div class="tbl-wrap slim">
+      <table>
+        <thead><tr><th>Nivel</th><th>Conc.</th><th>Reqs</th><th>RPS</th><th>Media</th><th>P95</th><th>Err %</th><th>Estado</th></tr></thead>
+        <tbody id="lvlBody"><tr class="empty-row"><td colspan="8">Sin niveles todavía. Lanza una ESCALADA para medir la curva de capacidad.</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════ 05 · CLI ══════════ -->
+  <section class="panel">
+    <div class="p-title"><span class="p-idx">05</span><h2>Equivalente CLI</h2><span class="p-meta">GENERADO DESDE TU CONFIG</span></div>
+    <div class="cli-note">El navegador limita las conexiones (≈6 por origen en HTTP/1.1; con <b>h2</b> multiplexa de verdad). Para romper el servidor de forma fiable, ejecuta estos comandos desde una terminal: replican la configuración de arriba.</div>
+    <div class="cli-tabs">
+      <button class="cli-tab active" data-cli="ab">ab</button>
+      <button class="cli-tab" data-cli="wrk">wrk</button>
+      <button class="cli-tab" data-cli="hey">hey</button>
+      <button class="cli-tab" data-cli="k6">k6</button>
+    </div>
+    <div class="cli-head">
+      <span id="cliName">apache-bench</span>
+      <button id="cliCopy" class="btn btn-ghost btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        COPIAR
+      </button>
+    </div>
+    <pre id="cliCode" class="slim" tabindex="0"></pre>
+  </section>
+
+  <!-- ══════════ 06 · REGISTRO ══════════ -->
+  <section class="panel">
+    <div class="p-title"><span class="p-idx">06</span><h2>Registro del reactor</h2>
+      <div class="log-tools">
+        <button id="logPause" class="btn btn-ghost btn-sm"><span id="logPauseLbl">PAUSA</span></button>
+        <button id="logClear" class="btn btn-ghost btn-sm">LIMPIAR</button>
+        <button id="logExport" class="btn btn-ghost btn-sm">EXPORTAR .LOG</button>
+      </div>
+    </div>
+    <div id="logBody" class="slim"></div>
+    <div class="report-row">
+      <button id="repJson" class="btn btn-start btn-sm" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="6 11 12 17 18 11"/><path d="M4 21h16"/></svg>
+        INFORME JSON
+      </button>
+      <button id="repCopy" class="btn btn-ghost btn-sm" disabled>COPIAR RESUMEN</button>
+      <p>El informe incluye configuración, protocolo, percentiles, histograma, serie temporal y niveles de escalada.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span id="footHost">SHINRA LOAD LAB v1.0</span>
+    <span>Proyecto fan no oficial · FFVII © SQUARE ENIX · hecho para probar nginx</span>
+    <span class="keys"><kbd>ESPACIO</kbd> ráfaga / detener <kbd>R</kbd> escalada <kbd>ESC</kbd> detener</span>
+  </footer>
+</div>
+
+<div id="toasts" aria-live="polite"></div>
+<noscript><div class="panel"><div class="p-title"><span class="p-idx">!!</span><h2>Reactor apagado</h2></div><p>Este banco de pruebas necesita JavaScript. Actívalo y vuelve al Sector 7.</p></div></noscript>
+
+<script>
+(() => {
+'use strict';
+/* ═══════════════════════════════════════════════════════════
+   SHINRA // LOAD LAB — motor de benchmark
+   ═══════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isFile = location.protocol === 'file:';
+const ORIGIN = isFile ? 'http://localhost:8080' : location.origin;
+const fmtB = b => b<1024 ? b+' B' : b<1048576 ? (b/1024).toFixed(1)+' KB' : (b/1048576).toFixed(2)+' MB';
+const fmtMs = v => v==null ? '—' : v.toFixed(1)+' ms';
+const pct = (sorted,q)=>{ if(!sorted.length) return null; return sorted[Math.max(0,Math.ceil(q*sorted.length)-1)]; };
+
+/* ─────────────── AUDIO (sintetizado, sutil) ─────────────── */
+let AC=null, master=null, muted=false;
+try{ muted = localStorage.getItem('ll_muted')==='1'; }catch(e){}
+function initAudio(){
+  if(AC) return;
+  try{
+    AC = new (window.AudioContext||window.webkitAudioContext)();
+    master = AC.createGain(); master.gain.value = muted?0:0.8; master.connect(AC.destination);
+  }catch(e){ AC=null; }
+}
+function beep(f0,f1,dur,type,g,when){
+  if(!AC||muted) return;
+  try{
+    const t=AC.currentTime+(when||0), o=AC.createOscillator(), gn=AC.createGain();
+    o.type=type||'square'; o.frequency.setValueAtTime(f0,t);
+    o.frequency.exponentialRampToValueAtTime(Math.max(30,f1),t+dur);
+    gn.gain.setValueAtTime(0.0001,t); gn.gain.exponentialRampToValueAtTime(g,t+0.004);
+    gn.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(gn); gn.connect(master); o.start(t); o.stop(t+dur+0.03);
+  }catch(e){}
+}
+const sfxStart = ()=>{ beep(660,660,.06,'square',.04); beep(990,990,.08,'square',.04,.07); };
+const sfxDone  = ()=>{ [523,659,784].forEach((f,i)=>beep(f,f,.1,'square',.04,i*.08)); };
+const sfxLevel = ()=> beep(1200,900,.05,'square',.03);
+const sfxLimit = ()=>{ beep(400,180,.22,'sawtooth',.05); beep(200,90,.25,'sawtooth',.05,.1); };
+const sfxStop  = ()=> beep(500,300,.09,'triangle',.04);
+let lastErrSfx=0;
+const sfxErr = ()=>{ const n=performance.now(); if(n-lastErrSfx<2000) return; lastErrSfx=n; beep(160,110,.14,'sawtooth',.05); };
+window.addEventListener('pointerdown',()=>{ initAudio(); if(AC&&AC.state==='suspended') AC.resume().catch(()=>{}); },{passive:true});
+function renderSound(){
+  $('sndBtn').setAttribute('aria-pressed',String(!muted));
+  $('sndLbl').textContent = muted?'SONIDO OFF':'SONIDO ON';
+  $('sndBtn').style.opacity = muted?'.6':'1';
+}
+$('sndBtn').addEventListener('click',()=>{
+  muted=!muted;
+  try{ localStorage.setItem('ll_muted',muted?'1':'0'); }catch(e){}
+  if(master) master.gain.value = muted?0:0.8;
+  renderSound();
+  if(!muted){ initAudio(); sfxLevel(); }
+});
+renderSound();
+
+/* ─────────────── TOASTS ─────────────── */
+function toast(msg,type='ok',opts={}){
+  const host=$('toasts');
+  while(host.children.length>=3) host.firstChild.remove();
+  const el=document.createElement('div');
+  el.className='toast '+type;
+  const sp=document.createElement('span'); sp.textContent=msg; el.appendChild(sp);
+  let gone=false;
+  const dismiss=()=>{ if(gone)return; gone=true; el.classList.add('out'); setTimeout(()=>el.remove(),320); };
+  if(opts.action){
+    const b=document.createElement('button'); b.textContent=opts.action;
+    b.addEventListener('click',()=>{ try{opts.onAction&&opts.onAction();}finally{dismiss();} });
+    el.appendChild(b);
+  }
+  host.appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('in')));
+  setTimeout(dismiss,opts.action?6000:3000);
+}
+
+/* ─────────────── REGISTRO ─────────────── */
+let entries=[], logPaused=false, logAuto=true;
+const logBody=$('logBody');
+function logNode(en){
+  const d=document.createElement('div'); d.className='log-line log-'+en.cls;
+  const t=document.createElement('span'); t.className='lt'; t.textContent='['+en.time+']';
+  const m=document.createElement('span'); m.className='lm'; m.textContent=en.msg;
+  d.append(t,m); return d;
+}
+function log(msg,cls=''){
+  const en={time:new Date().toLocaleTimeString('es-ES',{hour12:false}),msg,cls:cls||'sys'};
+  entries.push(en);
+  if(entries.length>300){ entries.shift(); logBody.firstChild&&logBody.firstChild.remove(); }
+  logBody.appendChild(logNode(en));
+  if(logAuto&&!logPaused) logBody.scrollTop=logBody.scrollHeight;
+}
+logBody.addEventListener('scroll',()=>{ logAuto = logBody.scrollTop+logBody.clientHeight >= logBody.scrollHeight-26; });
+$('logPause').addEventListener('click',()=>{
+  logPaused=!logPaused;
+  $('logPauseLbl').textContent=logPaused?'REANUDAR':'PAUSA';
+  if(!logPaused){ logAuto=true; logBody.scrollTop=logBody.scrollHeight; }
+});
+$('logClear').addEventListener('click',()=>{
+  if(!entries.length){ toast('El registro ya está vacío.','info'); return; }
+  const backup=entries.slice();
+  entries=[]; logBody.innerHTML='';
+  toast('Registro limpiado.','warn',{action:'DESHACER',onAction:()=>{
+    entries=backup; logBody.innerHTML='';
+    entries.forEach(en=>logBody.appendChild(logNode(en)));
+    logBody.scrollTop=logBody.scrollHeight;
+  }});
+});
+function download(name,content,mime){
+  const blob = content instanceof Blob ? content : new Blob([content],{type:mime||'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+$('logExport').addEventListener('click',()=>{
+  if(!entries.length){ toast('Nada que exportar.','info'); return; }
+  download('loadlab-'+Date.now()+'.log', entries.map(e=>`[${e.time}] ${e.msg}`).join('\n'));
+  toast('Registro exportado.','ok');
+});
+
+/* ─────────────── CONFIG ─────────────── */
+function normPath(p){
+  p=(p||'/').trim().replace(/\s+/g,'');
+  if(/^https?:\/\//i.test(p)){ try{ const u=new URL(p); p=u.pathname+u.search; }catch(e){ p='/'; } }
+  if(!p.startsWith('/')) p='/'+p;
+  return p;
+}
+function readCfg(){
+  return {
+    path: normPath($('path').value),
+    method: $('method').value,
+    total: clamp(parseInt($('total').value,10)||1000,10,50000),
+    conc: clamp(parseInt($('conc').value,10)||50,1,500),
+    timeout: clamp(parseInt($('timeoutMs').value,10)||5000,500,30000),
+    duration: clamp(parseInt($('duration').value,10)||15,5,120),
+    bust: $('bustTgl').checked,
+    rStart: clamp(parseInt($('rStart').value,10)||10,1,100),
+    rFactor: parseFloat($('rFactor').value)||2,
+    rMax: clamp(parseInt($('rMax').value,10)||400,10,500),
+    rErr: clamp(parseFloat($('rErr').value)||2,0.5,50)
+  };
+}
+function persistCfg(){
+  try{ localStorage.setItem('ll_cfg',JSON.stringify(readCfg())); }catch(e){}
+}
+function restoreCfg(){
+  try{
+    const c=JSON.parse(localStorage.getItem('ll_cfg')||'null');
+    if(!c) return;
+    if(c.path) $('path').value=c.path;
+    if(c.method) $('method').value=c.method;
+    if(c.total) $('total').value=c.total;
+    if(c.conc) $('conc').value=c.conc;
+    if(c.timeout) $('timeoutMs').value=c.timeout;
+    if(c.duration) $('duration').value=c.duration;
+    if(typeof c.bust==='boolean') $('bustTgl').checked=c.bust;
+    if(c.rStart) $('rStart').value=c.rStart;
+    if(c.rFactor) $('rFactor').value=String(c.rFactor);
+    if(c.rMax) $('rMax').value=c.rMax;
+    if(c.rErr) $('rErr').value=c.rErr;
+  }catch(e){}
+}
+function rampLevels(cfg){
+  const out=[]; let c=cfg.rStart;
+  while(c<=cfg.rMax && out.length<8){
+    const v=Math.round(c);
+    if(!out.length||out[out.length-1]!==v) out.push(v);
+    c*=cfg.rFactor;
+  }
+  if(!out.length) out.push(cfg.rStart);
+  return out;
+}
+function refreshRampPreview(){
+  const cfg=readCfg();
+  const lv=rampLevels(cfg);
+  $('rampPreview').textContent='Niveles: '+lv.map(v=>'×'+v).join(' → ')+' · '+'reqs/nivel = conc×8 (mín 40) · rotura si errores > '+cfg.rErr+'%';
+}
+let cfgTimer=null;
+['path','method','total','conc','timeoutMs','duration','rStart','rFactor','rMax','rErr'].forEach(id=>{
+  $(id).addEventListener('input',()=>{
+    clearTimeout(cfgTimer);
+    cfgTimer=setTimeout(()=>{ persistCfg(); genCLI(); refreshRampPreview(); },250);
+  });
+});
+$('bustTgl').addEventListener('change',()=>{ persistCfg(); genCLI(); });
+$$('.preset').forEach(p=>p.addEventListener('click',()=>{
+  $('path').value=p.dataset.path;
+  persistCfg(); genCLI(); probe();
+}));
+
+/* ─────────────── SEÑALES / FETCH ─────────────── */
+const hasSignalAny = typeof AbortSignal!=='undefined' && AbortSignal.any && AbortSignal.timeout;
+function combinedSignal(shared,ms){
+  if(hasSignalAny) return AbortSignal.any([shared, AbortSignal.timeout(ms)]);
+  const c=new AbortController();
+  const t=setTimeout(()=>c.abort(new DOMException('timeout','TimeoutError')),ms);
+  const onAb=()=>c.abort(shared.reason);
+  shared.addEventListener('abort',onAb,{once:true});
+  c.signal.addEventListener('abort',()=>{ clearTimeout(t); shared.removeEventListener('abort',onAb); },{once:true});
+  return c.signal;
+}
+let reqSeq=0;
+async function fireOne(cfg,shared){
+  reqSeq++;
+  const url = cfg.bust ? cfg.path+(cfg.path.includes('?')?'&':'?')+'_t='+reqSeq.toString(36)+Math.random().toString(36).slice(2,7) : cfg.path;
+  const t0=performance.now();
+  const res=await fetch(url,{method:cfg.method,cache:'no-store',signal:combinedSignal(shared,cfg.timeout),redirect:'follow'});
+  let bytes=0;
+  if(cfg.method!=='HEAD'){ const b=await res.arrayBuffer(); bytes=b.byteLength; }
+  else{ bytes=parseInt(res.headers.get('content-length')||'0',10)||0; }
+  return {status:res.status, ok:res.ok, dt:performance.now()-t0, bytes};
+}
+
+/* ─────────────── ESTADO / MOTOR ─────────────── */
+const S = {
+  phase:'idle', mode:null, stop:false, shared:null, cfg:null,
+  launched:0, done:0, ok:0, httpErr:0, to:0, net:0, bytes:0, inflight:0,
+  lat:[], statusMap:{}, t0:0, deadline:0,
+  samples:[], winLat:[], winDone:0, winErr:0, compMap:new Map(),
+  levels:[], levelIdx:0, levelTotal:0, breakIdx:-1,
+  uiTimer:null, sampleTimer:null, errLogs:0,
+  sortedCache:[], sortedLen:-1, hoverIdx:-1, lastReport:null, proto:'—'
+};
+function setLed(st,txt){ $('ledWrap').dataset.st=st; $('ledTxt').textContent=txt; }
+function setButtons(running){
+  $('btnFixed').disabled = running||isFile;
+  $('btnRamp').disabled = running||isFile;
+  $('btnSustain').disabled = running||isFile;
+  $('btnStop').disabled = !running;
+}
+function sortedLat(){
+  if(S.lat.length!==S.sortedLen){
+    S.sortedCache=[...S.lat].sort((a,b)=>a-b);
+    S.sortedLen=S.lat.length;
+  }
+  return S.sortedCache;
+}
+function metrics(){
+  const el=(performance.now()-S.t0)/1000;
+  const s=sortedLat();
+  const avg=s.length?s.reduce((a,b)=>a+b,0)/s.length:null;
+  return {
+    done:S.done, ok:S.ok, httpErr:S.httpErr, timeout:S.to, net:S.net, bytes:S.bytes,
+    elapsed:el, rps:el>0?S.done/el:0, avg,
+    p50:pct(s,.5), p95:pct(s,.95), p99:pct(s,.99),
+    min:s.length?s[0]:null, max:s.length?s[s.length-1]:null,
+    errRate:S.done>0?(S.httpErr+S.to+S.net)/S.done*100:0,
+    statusMap:Object.assign({},S.statusMap)
+  };
+}
+function resetRun(cfg,keepSeries){
+  S.cfg=cfg; S.stop=false; S.shared=new AbortController();
+  S.launched=0; S.done=0; S.ok=0; S.httpErr=0; S.to=0; S.net=0; S.bytes=0; S.inflight=0;
+  S.lat=[]; S.statusMap={}; S.sortedLen=-1; S.sortedCache=[];
+  S.winLat=[]; S.winDone=0; S.winErr=0; S.compMap.clear(); S.errLogs=0;
+  if(!keepSeries){ S.samples=[]; S.t0=performance.now(); }
+  S.hoverIdx=-1;
+  try{ performance.clearResourceTimings(); }catch(e){}
+  renderStats(true); drawTimeline(); drawHist();
+}
+function record(r){
+  S.done++; S.inflight--;
+  S.statusMap[r.status]=(S.statusMap[r.status]||0)+1;
+  if(r.ok) S.ok++; else S.httpErr++;
+  S.lat.push(r.dt); S.winLat.push(r.dt);
+  S.bytes+=r.bytes; S.winDone++;
+  if(!r.ok){ S.winErr++; if(S.errLogs<5){ S.errLogs++; log('HTTP '+r.status+' en '+r.dt.toFixed(0)+' ms','err'); sfxErr(); } }
+  bumpComp();
+}
+function recordErr(kind){
+  S.done++; S.inflight--; S.winDone++; S.winErr++;
+  if(kind==='timeout') S.to++; else S.net++;
+  if(S.errLogs<5){ S.errLogs++; log(kind==='timeout'?'Timeout ('+S.cfg.timeout+' ms) superado':'Fallo de red / conexión rechazada','err'); sfxErr(); }
+  bumpComp();
+}
+function bumpComp(){
+  const k=Math.floor(performance.now()/250);
+  S.compMap.set(k,(S.compMap.get(k)||0)+1);
+}
+function rps2s(){
+  const nowK=Math.floor(performance.now()/250);
+  let sum=0;
+  for(const [k,v] of S.compMap){ if(k<nowK-8) S.compMap.delete(k); else sum+=v; }
+  return sum/2;
+}
+async function workerPool(cfg,until){
+  const workers=Array.from({length:Math.min(cfg.conc,until==='time'?cfg.conc:cfg.total)},()=> (async()=>{
+    while(!S.stop){
+      if(until==='count'){ if(S.launched>=cfg.total) break; }
+      else{ if(performance.now()>=S.deadline) break; }
+      S.launched++; S.inflight++;
+      try{ record(await fireOne(cfg,S.shared.signal)); }
+      catch(e){
+        S.inflight--;
+        if(S.stop) break;
+        recordErr(e&&e.name==='TimeoutError'?'timeout':(e&&e.name==='AbortError'?'timeout':'net'));
+      }
+    }
+  })());
+  await Promise.all(workers);
+}
+function startTimers(){
+  stopTimers();
+  S.uiTimer=setInterval(uiTick,250);
+  S.sampleTimer=setInterval(sampleTick,500);
+}
+function stopTimers(){
+  if(S.uiTimer){ clearInterval(S.uiTimer); S.uiTimer=null; }
+  if(S.sampleTimer){ clearInterval(S.sampleTimer); S.sampleTimer=null; }
+}
+function sampleTick(){
+  const p95=S.winLat.length?pct([...S.winLat].sort((a,b)=>a-b),.95):null;
+  S.samples.push({t:(performance.now()-S.t0)/1000, rps:S.winDone*2, p95, err:S.winErr, level:S.levelIdx});
+  if(S.samples.length>600) S.samples.shift();
+  S.winLat=[]; S.winDone=0; S.winErr=0;
+  drawTimeline();
+  if(S.samples.length%2===0) drawHist();
+}
+function uiTick(){
+  renderStats(false);
+  const el=(performance.now()-S.t0)/1000;
+  $('elapsedTxt').textContent='t = '+el.toFixed(1)+' s';
+  let prog=0, eta='';
+  if(S.mode==='sustain'){
+    const total=S.cfg.duration;
+    prog=clamp((performance.now()-S.t0)/1000/total,0,1);
+    eta='ETA '+Math.max(0,total-el).toFixed(0)+' s';
+  }else{
+    const total=S.mode==='ramp'?S.levelTotal:S.cfg.total;
+    prog=total>0?clamp(S.done/total,0,1):0;
+    const m=metrics();
+    if(m.rps>0&&S.mode!=='sustain'){
+      const rem=Math.max(0,total-S.done)/m.rps;
+      eta='ETA '+rem.toFixed(0)+' s';
+    }
+  }
+  $('progressFill').style.width=(prog*100).toFixed(1)+'%';
+  $('progressTxt').textContent=(prog*100).toFixed(1)+'%';
+  $('etaTxt').textContent=eta;
+}
+function renderStats(zero){
+  const m=metrics();
+  const totalTxt = S.mode==='sustain' ? '∞ ('+ (S.cfg?S.cfg.duration:0) +' s)' : (S.mode==='ramp'?S.levelTotal:(S.cfg?S.cfg.total:0));
+  $('stDone').textContent=S.done+' / '+totalTxt;
+  $('stRps').textContent=m.rps.toFixed(1);
+  $('stRps2').textContent=rps2s().toFixed(1);
+  $('stOk').textContent=S.ok;
+  $('stHttpErr').textContent=S.httpErr;
+  $('stTo').textContent=S.to;
+  $('stNet').textContent=S.net;
+  $('stAvg').textContent=fmtMs(m.avg);
+  $('stP50').textContent=fmtMs(m.p50);
+  $('stP95').textContent=fmtMs(m.p95);
+  $('stP99').textContent=fmtMs(m.p99);
+  $('stMinMax').textContent=(m.min==null?'—':m.min.toFixed(0))+' / '+(m.max==null?'—':m.max.toFixed(0))+' ms';
+  $('stFlight').textContent=S.inflight;
+  $('stBytes').textContent=fmtB(S.bytes);
+  $('stThr').textContent=m.elapsed>0?fmtB(Math.round(S.bytes/m.elapsed))+'/s':'0 B/s';
+  const chips=$('statusChips'); chips.innerHTML='';
+  const codes=Object.keys(m.statusMap).sort();
+  if(!codes.length&&!S.to&&!S.net){ chips.innerHTML='<span class="schip">códigos HTTP: —</span>'; }
+  codes.forEach(c=>{
+    const el=document.createElement('span');
+    el.className='schip c'+c[0];
+    el.textContent=c+' × '+m.statusMap[c];
+    chips.appendChild(el);
+  });
+  if(S.to){ const el=document.createElement('span'); el.className='schip chip-bad'; el.textContent='TIMEOUT × '+S.to; chips.appendChild(el); }
+  if(S.net){ const el=document.createElement('span'); el.className='schip chip-bad'; el.textContent='RED × '+S.net; chips.appendChild(el); }
+  if(zero){ $('progressFill').style.width='0%'; $('progressTxt').textContent='0%'; $('elapsedTxt').textContent='t = 0.0 s'; $('etaTxt').textContent=''; }
+}
+
+/* ─────────────── MODOS ─────────────── */
+async function runFixed(){
+  if(S.phase!=='idle'||isFile) return;
+  const cfg=readCfg();
+  S.phase='run'; S.mode='fixed'; setButtons(true); setLed('run','EJECUTANDO'); setBgPaused(true);
+  $('progressWrap').classList.remove('ramp');
+  $('modeChip').textContent='MODO: RÁFAGA FIJA · '+cfg.method+' '+cfg.path+' · ×'+cfg.conc;
+  $('levelChip').textContent='ESCALADA: —';
+  resetRun(cfg,false); startTimers();
+  log('Ráfaga fija: '+cfg.total+' peticiones '+cfg.method+' '+cfg.path+' · concurrencia ×'+cfg.conc+' · timeout '+cfg.timeout+' ms','warn');
+  sfxStart();
+  await workerPool(cfg,'count');
+  stopTimers(); uiTick(); drawTimeline(); drawHist();
+  const m=metrics();
+  finishRun(m, S.stop?'detenida':'completa');
+}
+async function runSustain(){
+  if(S.phase!=='idle'||isFile) return;
+  const cfg=readCfg();
+  S.phase='run'; S.mode='sustain'; setButtons(true); setLed('run','EJECUTANDO'); setBgPaused(true);
+  $('progressWrap').classList.remove('ramp');
+  $('modeChip').textContent='MODO: SOSTENIDO '+cfg.duration+' s · '+cfg.method+' '+cfg.path+' · ×'+cfg.conc;
+  $('levelChip').textContent='ESCALADA: —';
+  resetRun(cfg,false);
+  S.deadline=S.t0+cfg.duration*1000;
+  startTimers();
+  log('Carga sostenida: '+cfg.duration+' s · '+cfg.method+' '+cfg.path+' · ×'+cfg.conc,'warn');
+  sfxStart();
+  await workerPool(cfg,'time');
+  stopTimers(); uiTick(); drawTimeline(); drawHist();
+  const m=metrics();
+  finishRun(m, S.stop?'detenida':'completa');
+}
+async function runRamp(){
+  if(S.phase!=='idle'||isFile) return;
+  const base=readCfg();
+  const levels=rampLevels(base);
+  S.phase='run'; S.mode='ramp'; setButtons(true); setLed('run','ESCALANDO'); setBgPaused(true);
+  $('progressWrap').classList.add('ramp');
+  S.levels=[]; S.levelIdx=0; S.breakIdx=-1; S.samples=[]; S.t0=performance.now();
+  renderLevelTable(); drawCurve();
+  log('Escalada iniciada: niveles '+levels.map(v=>'×'+v).join(' → ')+' · umbral de fallo '+base.rErr+'%','warn');
+  sfxStart();
+  for(let i=0;i<levels.length;i++){
+    if(S.stop) break;
+    S.levelIdx=i;
+    const conc=levels[i];
+    const reqs=clamp(conc*8,40,4000);
+    const cfg=Object.assign({},base,{conc,total:reqs});
+    S.levelTotal=reqs;
+    $('modeChip').textContent='MODO: ESCALADA · NIVEL '+(i+1)+'/'+levels.length+' · conc ×'+conc;
+    $('levelChip').textContent='ESCALADA: NIVEL '+(i+1)+'/'+levels.length+' · ×'+conc;
+    resetRun(cfg,true);
+    startTimers();
+    log('Nivel '+(i+1)+': ×'+conc+' con '+reqs+' peticiones…','info');
+    sfxLevel();
+    await workerPool(cfg,'count');
+    stopTimers(); uiTick(); drawHist();
+    const m=metrics();
+    const broke=m.errRate>base.rErr;
+    S.levels.push({level:i+1,conc,reqs,done:m.done,rps:m.rps,avg:m.avg,p95:m.p95,errRate:m.errRate,ok:m.ok,errors:m.httpErr+m.timeout+m.net,status:broke?'LÍMITE':(S.stop?'DETENIDO':'OK')});
+    renderLevelTable(); drawCurve();
+    log('Nivel '+(i+1)+' → '+m.rps.toFixed(1)+' req/s · media '+(m.avg==null?'—':m.avg.toFixed(1)+' ms')+' · P95 '+(m.p95==null?'—':m.p95.toFixed(1)+' ms')+' · errores '+m.errRate.toFixed(2)+'%', broke?'err':'ok');
+    if(broke){
+      S.breakIdx=i;
+      log('¡LÍMITE! Rotura detectada en concurrencia ×'+conc+' ('+m.errRate.toFixed(2)+'% de fallos > '+base.rErr+'%). Escalada detenida.','err');
+      toast('Límite encontrado: ×'+conc+' · '+m.errRate.toFixed(1)+'% fallos','err');
+      sfxLimit();
+      renderLevelTable(); drawCurve();
+      break;
+    }
+    if(S.stop) break;
+    if(i<levels.length-1){
+      for(let k=0;k<6&&!S.stop;k++) await sleep(100);
+    }
+  }
+  drawTimeline();
+  finalizeRamp(base);
+}
+function finishRun(m,how){
+  S.phase='idle'; setButtons(false); setBgPaused(false);
+  const peak=S.samples.reduce((a,s)=>Math.max(a,s.rps),0);
+  setLed(S.stop?'stop':(m.errRate>5?'err':'idle'), S.stop?'DETENIDO':(m.errRate>5?'INESTABLE':'EN ESPERA'));
+  $('modeChip').textContent='MODO: — (última: '+(S.mode==='sustain'?'sostenido':'ráfaga')+' '+how+')';
+  log((S.stop?'Prueba detenida':'Prueba completa')+' en '+m.elapsed.toFixed(2)+' s → '+m.ok+' OK · '+(m.httpErr+m.timeout+m.net)+' fallos · '+m.rps.toFixed(1)+' req/s · P95 '+(m.p95==null?'—':m.p95.toFixed(1)+' ms'), m.errRate>0?'warn':'ok');
+  S.stop?sfxStop():sfxDone();
+  toast((S.stop?'Detenido: ':'Completado: ')+m.ok+'/'+m.done+' · '+m.rps.toFixed(1)+' req/s', m.errRate>5?'err':m.errRate>0?'warn':'ok');
+  setVerdict(m,peak,null);
+  S.lastReport=buildReport(m,peak,null);
+  $('repJson').disabled=false; $('repCopy').disabled=false;
+  S.stop=false;
+}
+function finalizeRamp(base){
+  S.phase='idle'; setButtons(false); setBgPaused(false);
+  const good=S.levels.filter(l=>l.status==='OK');
+  const lastGood=good.length?good[good.length-1]:null;
+  const peak=S.samples.reduce((a,s)=>Math.max(a,s.rps),0);
+  const m=metrics();
+  setLed(S.stop?'stop':(S.breakIdx>=0?'err':'idle'), S.stop?'DETENIDO':(S.breakIdx>=0?'LÍMITE HALLADO':'EN ESPERA'));
+  $('modeChip').textContent='MODO: — (última: escalada)';
+  $('levelChip').textContent='ESCALADA: '+(S.breakIdx>=0?'LÍMITE en ×'+S.levels[S.breakIdx].conc:S.stop?'detenida':'sin rotura');
+  if(lastGood){
+    const cap='Capacidad estimada: ≈ '+lastGood.rps.toFixed(0)+' req/s sostenidos a concurrencia ×'+lastGood.conc+' con P95 '+(lastGood.p95==null?'—':lastGood.p95.toFixed(0)+' ms')+'.';
+    if(S.breakIdx>=0){
+      log(cap+' Rotura en ×'+S.levels[S.breakIdx].conc+'.','ok');
+      setVerdict(lastGood,peak,cap+' Rotura en ×'+S.levels[S.breakIdx].conc+'.');
+    }else if(S.stop){
+      log('Escalada detenida por el operador. '+cap,'warn');
+      setVerdict(lastGood,peak,cap+' (escalada detenida antes de tiempo)');
+    }else{
+      log('El reactor aguantó todos los niveles hasta ×'+lastGood.conc+' sin romper. Sube la concurrencia máxima para encontrar el límite real.','ok');
+      toast('Sin rotura hasta ×'+lastGood.conc+' — sube el máximo.','info');
+      setVerdict(lastGood,peak,cap+' Sin rotura: sube la concurrencia máxima.');
+    }
+  }else{
+    log('El objetivo falla desde el primer nivel. Revisa la ruta, el método o el servidor.','err');
+    setVerdict(null,peak,'El objetivo falla desde el nivel 1. Revisa ruta/método/servidor.');
+    sfxLimit();
+  }
+  S.stop?sfxStop():sfxDone();
+  S.lastReport=buildReport(m,peak,{levels:S.levels,breakAt:S.breakIdx>=0?S.levels[S.breakIdx].conc:null,threshold:base.rErr});
+  $('repJson').disabled=false; $('repCopy').disabled=false;
+  S.stop=false;
+}
+function stopRun(){
+  if(S.phase!=='run') return;
+  S.stop=true;
+  setLed('stop','DETENIENDO');
+  if(S.shared) S.shared.abort();
+  log('Detención solicitada por el operador.','warn');
+  sfxStop();
+}
+$('btnFixed').addEventListener('click',runFixed);
+$('btnRamp').addEventListener('click',runRamp);
+$('btnSustain').addEventListener('click',runSustain);
+$('btnStop').addEventListener('click',stopRun);
+document.addEventListener('keydown',e=>{
+  const typing=e.target&&e.target.closest&&e.target.closest('input,select,textarea');
+  if(e.key==='Escape'){ stopRun(); return; }
+  if(typing) return;
+  if(e.code==='Space'){ e.preventDefault(); S.phase==='run'?stopRun():runFixed(); }
+  else if(e.key==='r'||e.key==='R'){ runRamp(); }
+});
+
+/* ─────────────── VEREDICTO / RANGO ─────────────── */
+function setVerdict(m,peak,capText){
+  const box=$('verdictBox'), name=$('verdictName'), desc=$('verdictDesc'), star=$('verdictStar');
+  let n,d,c;
+  if(!m){ n='REACTOR INESTABLE'; c='#ff4d5e'; d=capText||'Sin respuestas válidas.'; }
+  else if(m.errRate>5){ n='REACTOR INESTABLE'; c='#ff4d5e'; d=(capText||'')+' Tasa de fallo '+m.errRate.toFixed(1)+'%.'; }
+  else if(m.rps>=1500){ n='SOLDIER · 1.ª CLASE'; c='#00e5a0'; d='Reflejos de Sephiroth.'; }
+  else if(m.rps>=600){ n='SOLDIER · 2.ª CLASE'; c='#38b6ff'; d='Digno de la élite de Shinra.'; }
+  else if(m.rps>=250){ n='SOLDIER · 3.ª CLASE'; c='#ffb02e'; d='Operativo. Sigue entrenando.'; }
+  else if(m.rps>=80){ n='TURK EN PRÁCTICAS'; c='#b06cff'; d='Cumple, pero sin gloria.'; }
+  else{ n='CHOCOBO DE CARGA'; c='#ff8a3d'; d='Kweh… capacidad modestia (¿HTTP/1.1 del navegador?).'; }
+  const extra=capText?capText:(m?('≈ '+m.rps.toFixed(0)+' req/s · P95 '+(m.p95==null?'—':m.p95.toFixed(0)+' ms')+' · fallo '+m.errRate.toFixed(2)+'%.'):'');
+  name.textContent=n; name.style.color=c; star.style.color=c; box.style.borderColor=c;
+  desc.textContent=extra+(peak?(' Pico: '+peak.toFixed(0)+' req/s.'):'')+(m&&!capText?(' '+d):'');
+}
+
+/* ─────────────── TABLA DE NIVELES ─────────────── */
+function renderLevelTable(){
+  const tb=$('lvlBody'); tb.innerHTML='';
+  if(!S.levels.length){ tb.innerHTML='<tr class="empty-row"><td colspan="8">Sin niveles todavía. Lanza una ESCALADA para medir la curva de capacidad.</td></tr>'; return; }
+  S.levels.forEach(l=>{
+    const tr=document.createElement('tr');
+    if(l.status==='LÍMITE') tr.className='break-row';
+    const stCol=l.status==='OK'?'var(--accent)':l.status==='LÍMITE'?'var(--danger)':'var(--warn)';
+    tr.innerHTML='<td>N'+l.level+'</td><td>×'+l.conc+'</td><td>'+l.done+'/'+l.reqs+'</td>'+
+      '<td style="color:var(--accent)">'+l.rps.toFixed(1)+'</td>'+
+      '<td>'+(l.avg==null?'—':l.avg.toFixed(1))+'</td>'+
+      '<td style="color:var(--warn)">'+(l.p95==null?'—':l.p95.toFixed(1))+'</td>'+
+      '<td style="color:'+(l.errRate>0?'var(--danger)':'var(--muted)')+'">'+l.errRate.toFixed(2)+'</td>'+
+      '<td style="color:'+stCol+'">'+(l.status==='OK'?'✓ OK':l.status==='LÍMITE'?'✕ LÍMITE':'◼ DET.')+'</td>';
+    tb.appendChild(tr);
+  });
+}
+
+/* ─────────────── GRÁFICAS ─────────────── */
+const tl=$('tlCanvas'), tlx=tl.getContext('2d');
+const hc=$('histCanvas'), hx=hc.getContext('2d');
+const cc=$('curveCanvas'), cx2=cc.getContext('2d');
+function sizeCanvas(cv){
+  const box=cv.parentElement, d=Math.min(devicePixelRatio||1,2);
+  cv.width=box.clientWidth*d; cv.height=box.clientHeight*d;
+  cv.getContext('2d').setTransform(d,0,0,d,0,0);
+  return {w:box.clientWidth,h:box.clientHeight};
+}
+function emptyMsg(ctx,w,h,txt){
+  ctx.fillStyle='#4d617a'; ctx.font='12px "Share Tech Mono",monospace'; ctx.textAlign='center';
+  ctx.fillText(txt,w/2,h/2); ctx.textAlign='left';
+}
+function drawTimeline(){
+  const {w,h}=sizeCanvas(tl);
+  tlx.clearRect(0,0,w,h);
+  const data=S.samples;
+  const padL=44,padR=48,padT=14,padB=22,cw=w-padL-padR,ch=h-padT-padB;
+  if(!data.length){ emptyMsg(tlx,w,h,'· esperando telemetría ·'); return; }
+  const tMax=Math.max(data[data.length-1].t,1);
+  const rMax=Math.max(...data.map(s=>s.rps),1)*1.15;
+  const pMax=Math.max(...data.map(s=>s.p95||0),1)*1.15;
+  tlx.font='10px "Share Tech Mono",monospace';
+  for(let i=0;i<=4;i++){
+    const y=padT+ch-ch*i/4;
+    tlx.strokeStyle='rgba(30,42,58,.9)'; tlx.beginPath(); tlx.moveTo(padL,y); tlx.lineTo(w-padR,y); tlx.stroke();
+    tlx.fillStyle='#00b37c'; tlx.fillText(Math.round(rMax*i/4),4,y+3);
+    tlx.fillStyle='#c77f00'; tlx.fillText(Math.round(pMax*i/4),w-padR+6,y+3);
+  }
+  tlx.fillStyle='#4d617a';
+  tlx.fillText('req/s',4,padT-3); tlx.fillText('ms',w-padR+6,padT-3);
+  tlx.fillText('0s',padL,h-6); tlx.fillText(tMax.toFixed(0)+'s',w-padR-18,h-6);
+  const X=t=>padL+t/tMax*cw;
+  // área RPS
+  tlx.beginPath();
+  data.forEach((s,i)=>{ const x=X(s.t),y=padT+ch-s.rps/rMax*ch; i?tlx.lineTo(x,y):tlx.moveTo(x,y); });
+  tlx.strokeStyle='#00e5a0'; tlx.lineWidth=1.8; tlx.stroke();
+  tlx.lineTo(X(data[data.length-1].t),padT+ch); tlx.lineTo(X(data[0].t),padT+ch); tlx.closePath();
+  const g=tlx.createLinearGradient(0,padT,0,padT+ch);
+  g.addColorStop(0,'rgba(0,229,160,.22)'); g.addColorStop(1,'rgba(0,229,160,0)');
+  tlx.fillStyle=g; tlx.fill();
+  // línea P95
+  tlx.beginPath(); let started=false;
+  data.forEach(s=>{ if(s.p95==null) return; const x=X(s.t),y=padT+ch-s.p95/pMax*ch; started?tlx.lineTo(x,y):(tlx.moveTo(x,y),started=true); });
+  tlx.strokeStyle='#ffb02e'; tlx.lineWidth=1.5; tlx.setLineDash([5,4]); tlx.stroke(); tlx.setLineDash([]);
+  // marcas de error
+  data.forEach(s=>{ if(s.err>0){ tlx.fillStyle='#ff4d5e'; tlx.fillRect(X(s.t)-1.5,padT+ch-6,3,6); } });
+  // hover
+  if(S.hoverIdx>=0&&S.hoverIdx<data.length){
+    const s=data[S.hoverIdx], x=X(s.t);
+    tlx.strokeStyle='rgba(219,231,244,.35)'; tlx.beginPath(); tlx.moveTo(x,padT); tlx.lineTo(x,padT+ch); tlx.stroke();
+    const lines=['t='+s.t.toFixed(1)+'s','rps '+s.rps.toFixed(1),'p95 '+(s.p95==null?'—':s.p95.toFixed(1)+'ms'),'err '+s.err];
+    const bw=104,bh=58,bx=clamp(x+8,padL,w-padR-bw),by=padT+6;
+    tlx.fillStyle='rgba(13,20,29,.95)'; tlx.strokeStyle='#2c3d52';
+    tlx.fillRect(bx,by,bw,bh); tlx.strokeRect(bx,by,bw,bh);
+    tlx.fillStyle='#dbe7f4';
+    lines.forEach((l,i)=>tlx.fillText(l,bx+8,by+15+i*12));
+  }
+}
+tl.addEventListener('mousemove',e=>{
+  if(!S.samples.length) return;
+  const r=tl.getBoundingClientRect();
+  const padL=44,padR=48,cw=r.width-padL-padR;
+  const tMax=Math.max(S.samples[S.samples.length-1].t,1);
+  const t=clamp((e.clientX-r.left-padL)/cw,0,1)*tMax;
+  let best=0,bd=1e9;
+  S.samples.forEach((s,i)=>{ const d=Math.abs(s.t-t); if(d<bd){bd=d;best=i;} });
+  S.hoverIdx=best; drawTimeline();
+});
+tl.addEventListener('mouseleave',()=>{ S.hoverIdx=-1; drawTimeline(); });
+function drawHist(){
+  const {w,h}=sizeCanvas(hc);
+  hx.clearRect(0,0,w,h);
+  const s=sortedLat();
+  if(!s.length){ emptyMsg(hx,w,h,'· sin latencias registradas ·'); return; }
+  const p50=pct(s,.5),p95=pct(s,.95),p99=pct(s,.99);
+  const cap=Math.max(p99*1.05,1);
+  const B=24,counts=new Array(B).fill(0);
+  let excluded=0;
+  s.forEach(v=>{ if(v>cap){excluded++;return;} counts[Math.min(B-1,Math.floor(v/cap*B))]++; });
+  const cMax=Math.max(...counts,1);
+  const padL=36,padR=12,padT=16,padB=22,cw=w-padL-padR,ch=h-padT-padB;
+  hx.font='10px "Share Tech Mono",monospace';
+  for(let i=0;i<=3;i++){
+    const y=padT+ch-ch*i/3;
+    hx.strokeStyle='rgba(30,42,58,.9)'; hx.beginPath(); hx.moveTo(padL,y); hx.lineTo(w-padR,y); hx.stroke();
+    hx.fillStyle='#4d617a'; hx.fillText(Math.round(cMax*i/3),4,y+3);
+  }
+  const bw=cw/B;
+  counts.forEach((n,i)=>{
+    const center=(i+0.5)/B*cap;
+    const col=center<=p50?'#00e5a0':center<=p95?'#ffb02e':'#ff4d5e';
+    const bh=n/cMax*ch;
+    hx.fillStyle=col; hx.globalAlpha=.85;
+    hx.fillRect(padL+i*bw+1,padT+ch-bh,bw-2,bh);
+    hx.globalAlpha=1;
+  });
+  [[p50,'#38b6ff','P50'],[p95,'#ffb02e','P95']].forEach(([v,col,lbl])=>{
+    if(v==null||v>cap) return;
+    const x=padL+v/cap*cw;
+    hx.strokeStyle=col; hx.setLineDash([4,4]); hx.beginPath(); hx.moveTo(x,padT); hx.lineTo(x,padT+ch); hx.stroke(); hx.setLineDash([]);
+    hx.fillStyle=col; hx.fillText(lbl+' '+v.toFixed(0),Math.min(x+4,w-padR-52),padT+10);
+  });
+  hx.fillStyle='#4d617a';
+  hx.fillText('0',padL,h-6);
+  hx.fillText(cap.toFixed(0)+' ms',w-padR-44,h-6);
+  hx.fillText('n='+s.length+(excluded?(' · '+excluded+' >P99 fuera'),'')||'',padL+cw/2-40,h-6);
+}
+function drawCurve(){
+  const {w,h}=sizeCanvas(cc);
+  cx2.clearRect(0,0,w,h);
+  const L=S.levels;
+  if(!L.length){ emptyMsg(cx2,w,h,'· la escalada dibujará aquí la curva de capacidad ·'); return; }
+  const padL=48,padR=52,padT=18,padB=30,cw=w-padL-padR,ch=h-padT-padB;
+  const rMax=Math.max(...L.map(l=>l.rps),1)*1.15;
+  const pMax=Math.max(...L.map(l=>l.p95||0),1)*1.15;
+  const X=i=>L.length===1?padL+cw/2:padL+i/(L.length-1)*cw;
+  cx2.font='10px "Share Tech Mono",monospace';
+  for(let i=0;i<=4;i++){
+    const y=padT+ch-ch*i/4;
+    cx2.strokeStyle='rgba(30,42,58,.9)'; cx2.beginPath(); cx2.moveTo(padL,y); cx2.lineTo(w-padR,y); cx2.stroke();
+    cx2.fillStyle='#00b37c'; cx2.fillText(Math.round(rMax*i/4),4,y+3);
+    cx2.fillStyle='#c77f00'; cx2.fillText(Math.round(pMax*i/4),w-padR+6,y+3);
+  }
+  cx2.fillStyle='#4d617a'; cx2.fillText('req/s',4,padT-5); cx2.fillText('ms',w-padR+6,padT-5);
+  // marcador de límite
+  if(S.breakIdx>=0){
+    const x=X(S.breakIdx);
+    cx2.strokeStyle='#ff4d5e'; cx2.setLineDash([6,5]); cx2.lineWidth=1.5;
+    cx2.beginPath(); cx2.moveTo(x,padT); cx2.lineTo(x,padT+ch); cx2.stroke(); cx2.setLineDash([]);
+    cx2.fillStyle='#ff4d5e'; cx2.fillText('LÍMITE',Math.min(x+5,w-padR-44),padT+12);
+  }
+  // series
+  const series=[
+    {get:l=>l.rps,max:rMax,col:'#00e5a0'},
+    {get:l=>l.p95,max:pMax,col:'#ffb02e'}
+  ];
+  series.forEach(se=>{
+    cx2.beginPath(); let st=false;
+    L.forEach((l,i)=>{ const v=se.get(l); if(v==null) return; const x=X(i),y=padT+ch-v/se.max*ch; st?cx2.lineTo(x,y):(cx2.moveTo(x,y),st=true); });
+    cx2.strokeStyle=se.col; cx2.lineWidth=2; cx2.stroke();
+    L.forEach((l,i)=>{
+      const v=se.get(l); if(v==null) return;
+      const x=X(i),y=padT+ch-v/se.max*ch;
+      cx2.fillStyle=se.col; cx2.beginPath(); cx2.arc(x,y,3.5,0,6.283); cx2.fill();
+      if(i===L.length-1){ cx2.fillText(v.toFixed(0),Math.min(x+6,w-padR-30),y-6); }
+    });
+  });
+  L.forEach((l,i)=>{ cx2.fillStyle=l.status==='LÍMITE'?'#ff4d5e':'#7e93ad'; cx2.fillText('×'+l.conc,X(i)-12,h-8); });
+}
+let rzT=null;
+window.addEventListener('resize',()=>{
+  clearTimeout(rzT);
+  rzT=setTimeout(()=>{ drawTimeline(); drawHist(); drawCurve(); sizeBg(); },150);
+});
+
+/* ─────────────── SONDA / PROTOCOLO ─────────────── */
+async function probe(){
+  if(isFile){ $('probeChip').textContent='file:// — sin red'; $('probeChip').className='probe-chip err'; return; }
+  const cfg=readCfg();
+  const url=cfg.path+(cfg.path.includes('?')?'&':'?')+'_probe='+Date.now().toString(36);
+  const chip=$('probeChip');
+  chip.textContent='probando…'; chip.className='probe-chip';
+  const t0=performance.now();
+  try{
+    const c=new AbortController(); const to=setTimeout(()=>c.abort(),4000);
+    const res=await fetch(url,{method:'HEAD',cache:'no-store',signal:c.signal});
+    clearTimeout(to);
+    const ms=Math.round(performance.now()-t0);
+    chip.textContent='HTTP '+res.status+' · '+ms+' ms';
+    chip.className='probe-chip '+(res.status<400?'ok':'err');
+    let proto='';
+    try{
+      const abs=new URL(url,location.href).href;
+      const en=performance.getEntriesByName(abs);
+      if(en.length) proto=en[en.length-1].nextHopProtocol||'';
+    }catch(e){}
+    S.proto=proto||'—';
+    const pb=$('protoBadge');
+    pb.innerHTML='PROTO: <b>'+S.proto+'</b>';
+    pb.className='badge '+(S.proto==='h2'||S.proto==='h3'?'h2':S.proto.startsWith('http/1')?'h1':'');
+    const note=$('protoNote');
+    if(S.proto==='h2'||S.proto==='h3'){
+      note.className='proto-note';
+      note.innerHTML='Protocolo <b>'+S.proto+'</b> detectado: el navegador multiplexa muchas peticiones en una conexión. La concurrencia configurada se aplica de verdad. ▸ Consejo: activa h2 en nginx con <b>listen 443 ssl; http2 on;</b>';
+    }else if(S.proto.startsWith('http/1')){
+      note.className='proto-note warn';
+      note.innerHTML='Protocolo <b>'+S.proto+'</b>: el navegador limita a <b>≈6 conexiones por origen</b>. Aunque pidas ×50, «En vuelo» se quedará en ~6. Para medir el límite real del servidor usa los comandos CLI de la sección 05.';
+    }else{
+      note.className='proto-note';
+      note.innerHTML='Protocolo no detectado (¿caché o timing vacío?). Observa el contador <b>En vuelo</b> durante la prueba para conocer la concurrencia real.';
+    }
+    log('Sonda: HEAD '+cfg.path+' → HTTP '+res.status+' · '+ms+' ms · proto '+(S.proto||'¿?'), res.status<400?'ok':'warn');
+  }catch(e){
+    chip.textContent='FALLO DE RED'; chip.className='probe-chip err';
+    log('Sonda fallida en '+cfg.path+': '+(e&&e.message||e),'err');
+  }
+}
+$('probeBtn').addEventListener('click',probe);
+
+/* ─────────────── CLI ─────────────── */
+let currentCli='ab';
+const CLI_NAMES={ab:'apache-bench',wrk:'wrk',hey:'hey',k6:'k6'};
+function cliText(kind){
+  const c=readCfg();
+  const url=ORIGIN+c.path;
+  const tSec=Math.round(c.timeout/1000);
+  if(kind==='ab'){
+    return '# Apache Bench — '+c.total+' peticiones, concurrencia '+c.conc+'\n'+
+      '# -k keep-alive · -s timeout por petición (s)'+(c.method==='HEAD'?' · -i usa HEAD':'')+'\n'+
+      'ab -n '+c.total+' -c '+c.conc+' -s '+tSec+' -k'+(c.method==='HEAD'?' -i':'')+' "'+url+'"';
+  }
+  if(kind==='wrk'){
+    return '# wrk — carga sostenida '+c.duration+' s, '+c.conc+' conexiones\n'+
+      '# wrk usa GET; para HEAD necesitas un script Lua (-s head.lua)\n'+
+      'wrk -t '+Math.min(8,c.conc)+' -c '+c.conc+' -d '+c.duration+'s --timeout '+tSec+'s "'+url+'"';
+  }
+  if(kind==='hey'){
+    return '# hey — '+c.total+' peticiones, concurrencia '+c.conc+', método '+c.method+'\n'+
+      'hey -n '+c.total+' -c '+c.conc+' -t '+tSec+' -m '+c.method+' -disable-compression "'+url+'"';
+  }
+  // k6
+  const script=[
+    '# 1) guarda esto como script.js',
+    'import http from "k6/http";',
+    'import { check } from "k6";',
+    '',
+    'export const options = {',
+    '  vus: '+c.conc+',',
+    '  duration: "'+c.duration+'s",',
+    '  thresholds: { http_req_failed: ["rate<0.02"] },',
+    '};',
+    '',
+    'export default function () {',
+    '  const res = http.request("'+c.method+'", __ENV.TARGET);',
+    '  check(res, { "2xx": (r) => r.status >= 200 && r.status < 300 });',
+    '}',
+    '',
+    '# 2) ejecuta:',
+    'k6 run -e TARGET="'+url+'" script.js'
+  ].join('\n');
+  return script;
+}
+function highlightCli(src){
+  const esc=src.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rx=new RegExp('('+/#[^\n]*/.source+')|('+/"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'/.source+')|('+/--?[A-Za-z][\w-]*/.source+')|('+/\b\d[\d.]*\b/.source+')|\\b(import|from|export|const|function|check|ab|wrk|hey|k6|run)\\b','g');
+  return esc.replace(rx,(m,c,s,f,n,k)=>{
+    const cls=c?'tok-c':s?'tok-s':f?'tok-f':n?'tok-n':'tok-k';
+    return '<span class="'+cls+'">'+m+'</span>';
+  });
+}
+function genCLI(){
+  $('cliName').textContent=CLI_NAMES[currentCli];
+  $('cliCode').innerHTML=highlightCli(cliText(currentCli));
+  $$('.cli-tab').forEach(t=>t.classList.toggle('active',t.dataset.cli===currentCli));
+}
+$$('.cli-tab').forEach(t=>t.addEventListener('click',()=>{ currentCli=t.dataset.cli; genCLI(); }));
+async function copyText(txt){
+  try{ await navigator.clipboard.writeText(txt); return true; }
+  catch(e){
+    try{
+      const ta=document.createElement('textarea');
+      ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      const ok=document.execCommand('copy'); ta.remove(); return ok;
+    }catch(e2){ return false; }
+  }
+}
+$('cliCopy').addEventListener('click',async()=>{
+  const ok=await copyText(cliText(currentCli));
+  toast(ok?'Comando '+currentCli+' copiado.':'No se pudo copiar; selecciona el texto.',ok?'ok':'err');
+  if(ok) log('Comando CLI ('+currentCli+') copiado al portapapeles.','info');
+});
+
+/* ─────────────── INFORME ─────────────── */
+function buildReport(m,peak,ramp){
+  const s=sortedLat();
+  const B=24,cap=s.length?Math.max(pct(s,.99)*1.05,1):1;
+  const counts=new Array(B).fill(0);
+  s.forEach(v=>{ if(v<=cap) counts[Math.min(B-1,Math.floor(v/cap*B))]++; });
+  return {
+    tool:'SHINRA LOAD LAB', version:'1.0', timestamp:new Date().toISOString(),
+    origin:ORIGIN, protocol:S.proto,
+    mode:S.mode, config:S.cfg,
+    results:{
+      done:m.done, ok:m.ok, httpErrors:m.httpErr, timeouts:m.timeout, networkErrors:m.net,
+      errorRatePct:+m.errRate.toFixed(3), elapsedSec:+m.elapsed.toFixed(3),
+      rps:+m.rps.toFixed(2), peakRps:+peak.toFixed(2), bytes:m.bytes,
+      latencyMs:{avg:m.avg==null?null:+m.avg.toFixed(2),p50:m.p50==null?null:+m.p50.toFixed(2),p95:m.p95==null?null:+m.p95.toFixed(2),p99:m.p99==null?null:+m.p99.toFixed(2),min:m.min==null?null:+m.min.toFixed(2),max:m.max==null?null:+m.max.toFixed(2)},
+      statusCodes:m.statusMap
+    },
+    histogram:{bucketMs:+(cap/B).toFixed(3),counts},
+    timeline:S.samples.map(x=>({t:+x.t.toFixed(2),rps:+x.rps.toFixed(2),p95:x.p95==null?null:+x.p95.toFixed(2),err:x.err})),
+    ramp:ramp||null
+  };
+}
+$('repJson').addEventListener('click',()=>{
+  if(!S.lastReport) return;
+  download('loadlab-informe-'+Date.now()+'.json',JSON.stringify(S.lastReport,null,2),'application/json');
+  toast('Informe JSON descargado.','ok');
+  log('Informe JSON descargado.','info');
+});
+$('repCopy').addEventListener('click',async()=>{
+  const r=S.lastReport; if(!r) return;
+  const L=r.results.latencyMs;
+  const txt=[
+    'SHINRA LOAD LAB — resumen de prueba',
+    'Objetivo: '+r.config.method+' '+r.config.path+' ('+r.protocol+')',
+    'Modo: '+r.mode+' · conc ×'+r.config.conc+' · '+r.results.done+' peticiones en '+r.results.elapsedSec+' s',
+    'Resultado: '+r.results.ok+' OK · '+r.results.httpErrors+' HTTP≠2xx · '+r.results.timeouts+' timeouts · '+r.results.networkErrors+' red',
+    'Rendimiento: '+r.results.rps+' req/s (pico '+r.results.peakRps+') · '+fmtB(r.results.bytes),
+    'Latencia: media '+L.avg+' ms · P50 '+L.p50+' · P95 '+L.p95+' · P99 '+L.p99,
+    r.ramp&&r.ramp.breakAt?('Límite de capacidad: rotura en concurrencia ×'+r.ramp.breakAt):''
+  ].filter(Boolean).join('\n');
+  const ok=await copyText(txt);
+  toast(ok?'Resumen copiado al portapapeles.':'No se pudo copiar.',ok?'ok':'err');
+});
+
+/* ─────────────── FONDO (pausado durante pruebas) ─────────────── */
+const bg=$('bgCanvas'), bx=bg.getContext('2d');
+let BW=0,BH=0,bgRAF=null,bgPaused=false,bgT=0;
+const motes=[];
+function sizeBg(){
+  const d=Math.min(devicePixelRatio||1,1.5);
+  BW=innerWidth; BH=innerHeight;
+  bg.width=BW*d; bg.height=BH*d;
+  bx.setTransform(d,0,0,d,0,0);
+  motes.length=0;
+  const n=reduced?14:clamp(Math.round(BW*BH/34000),20,44);
+  for(let i=0;i<n;i++) motes.push({x:Math.random()*BW,y:Math.random()*BH,r:0.8+Math.random()*1.8,vy:-(0.08+Math.random()*0.22),sw:Math.random()*6.28,a:0.12+Math.random()*0.25});
+}
+function bgFrame(){
+  bgT+=1/60;
+  bx.clearRect(0,0,BW,BH);
+  for(const m of motes){
+    if(!reduced){ m.y+=m.vy; m.x+=Math.sin(m.sw+bgT*0.6)*0.15; }
+    if(m.y<-10){ m.y=BH+10; m.x=Math.random()*BW; }
+    bx.fillStyle='rgba(0,229,160,'+(m.a*0.25).toFixed(2)+')';
+    bx.beginPath(); bx.arc(m.x,m.y,m.r*3,0,6.283); bx.fill();
+    bx.fillStyle='rgba(0,229,160,'+m.a.toFixed(2)+')';
+    bx.beginPath(); bx.arc(m.x,m.y,m.r,0,6.283); bx.fill();
+  }
+  bgRAF=requestAnimationFrame(bgFrame);
+}
+function setBgPaused(p){
+  bgPaused=p;
+  if(p||document.hidden){ if(bgRAF!=null){ cancelAnimationFrame(bgRAF); bgRAF=null; } }
+  else if(bgRAF==null&&!reduced){ bgRAF=requestAnimationFrame(bgFrame); }
+}
+document.addEventListener('visibilitychange',()=>setBgPaused(bgPaused));
+sizeBg();
+if(!reduced) setBgPaused(false); else bgFrame()&&cancelAnimationFrame(bgRAF),bgRAF=null,bx.clearRect(0,0,BW,BH),bgFrameStatic();
+function bgFrameStatic(){ // un solo frame estático si reduced-motion
+  for(const m of motes){ bx.fillStyle='rgba(0,229,160,'+m.a.toFixed(2)+')'; bx.beginPath(); bx.arc(m.x,m.y,m.r,0,6.283); bx.fill(); }
+}
+
+/* ─────────────── INIT ─────────────── */
+function init(){
+  $('hostBadge').innerHTML='Origen: <b>'+ORIGIN.replace(/^https?:\/\//,'')+'</b>';
+  $('footHost').textContent='SHINRA LOAD LAB v1.0 · '+ORIGIN.replace(/^https?:\/\//,'')+' · '+new Date().getFullYear();
+  restoreCfg();
+  refreshRampPreview();
+  genCLI();
+  renderStats(true);
+  drawTimeline(); drawHist(); drawCurve();
+  setButtons(false);
+  log('SHINRA LOAD LAB en línea. Reactor 07 listo para medir tu nginx.','ok');
+  log('Objetivo por defecto: '+ORIGIN+' · las animaciones de fondo se pausan durante las pruebas para no falsear resultados.','info');
+  if(isFile){
+    $('fileBanner').classList.add('show');
+    $('protoBadge').innerHTML='PROTO: <b>file</b>';
+    $('protoBadge').className='badge bad';
+    $('protoNote').className='proto-note warn';
+    $('protoNote').innerHTML='Sin HTTP no hay benchmark: despliega este archivo con nginx y recarga. Los comandos CLI de la sección 05 usan <b>'+ORIGIN+'</b> como base.';
+    log('file:// detectado: benchmark desactivado hasta servir el archivo por HTTP.','warn');
+    $('probeChip').textContent='file:// — sin red'; $('probeChip').className='probe-chip err';
+  }else{
+    probe();
+  }
+}
+init();
+})();
+</script>
+</body>
+</html>
