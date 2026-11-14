@@ -1,325 +1,163 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NGINX // Stress Benchmark</title>
-  <style>
-    :root {
-      --bg: #0b0f14;
-      --panel: #121821;
-      --border: #1f2a38;
-      --text: #e2e8f0;
-      --muted: #8b9bb4;
-      --accent: #00e5a0;
-      --warn: #f59e0b;
-      --danger: #ef4444;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      background: var(--bg);
-      color: var(--text);
-      padding: 1.25rem;
-      line-height: 1.5;
-    }
-    .container { max-width: 900px; margin: 0 auto; }
-    header {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1rem;
-      margin-bottom: 1.25rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    h1 { font-size: 1.2rem; color: var(--accent); letter-spacing: 1px; }
-    .badge {
-      background: #16222f;
-      border: 1px solid var(--border);
-      padding: 0.25rem 0.6rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-    }
-    .controls {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-    label { display: block; font-size: 0.75rem; color: var(--muted); margin-bottom: 0.25rem; }
-    input, select {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 0.5rem;
-      border-radius: 4px;
-      font-family: inherit;
-    }
-    .buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    button {
-      cursor: pointer;
-      border: none;
-      padding: 0.65rem 1.2rem;
-      border-radius: 4px;
-      font-family: inherit;
-      font-weight: bold;
-      font-size: 0.85rem;
-      transition: opacity 0.15s;
-    }
-    button:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-start { background: var(--accent); color: #04130d; }
-    .btn-ramp { background: var(--warn); color: #1a1000; }
-    .btn-stop { background: var(--danger); color: #fff; }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 0.75rem;
-    }
-    .stat {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      padding: 0.75rem;
-      border-radius: 6px;
-    }
-    .stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
-    .stat-val { font-size: 1.25rem; font-weight: bold; margin-top: 0.2rem; }
-    .ok { color: var(--accent); }
-    .err { color: var(--danger); }
-    .progress-wrap {
-      width: 100%;
-      height: 8px;
-      background: var(--bg);
-      border-radius: 4px;
-      overflow: hidden;
-      margin: 1rem 0 0.5rem;
-    }
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: var(--accent);
-      transition: width 0.1s linear;
-    }
-    #log {
-      background: #070a0e;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.75rem;
-      height: 220px;
-      overflow-y: auto;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-    .log-ok { color: var(--accent); }
-    .log-warn { color: var(--warn); }
-    .log-err { color: var(--danger); }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <h1>NGINX // BENCHMARK DE LÍMITE</h1>
-      <span class="badge" id="targetDisplay">Host: detectando...</span>
-    </header>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#070b10" />
+<meta name="description" content="SHINRA LOAD LAB — banco de pruebas de capacidad para servidores nginx. Ráfaga fija, escalada hasta rotura y modo sostenido, con telemetría en vivo." />
+<title>SHINRA // LOAD LAB — Benchmark de capacidad nginx</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,2 29,9.5 29,22.5 16,30 3,22.5 3,9.5' fill='%230d141d' stroke='%2300e5a0' stroke-width='2'/%3E%3Cpath d='M18 8l-7 9h5l-2 7 7-9h-5z' fill='%2300e5a0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   SHINRA // LOAD LAB — consola de capacidad del reactor
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --bg:#070b10; --panel:#0d141d; --panel2:#101a26; --inset:#080d13;
+  --border:#1e2a3a; --border2:#2c3d52;
+  --text:#dbe7f4; --muted:#7e93ad; --dim:#4d617a;
+  --accent:#00e5a0; --accent2:#00b37c;
+  --warn:#ffb02e; --danger:#ff4d5e;
+  --blue:#38b6ff; --purple:#b06cff; --orange:#ff8a3d;
+  --disp:'Chakra Petch','Segoe UI',sans-serif;
+  --mono:'Share Tech Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:var(--mono); font-size:15px; line-height:1.5;
+  min-height:100vh; overflow-x:hidden;
+}
+::selection{background:rgba(0,229,160,.28);color:#fff}
 
-    <div class="panel">
-      <div class="controls">
-        <div>
-          <label for="endpoint">Ruta objetivo</label>
-          <input type="text" id="endpoint" value="/" />
-        </div>
-        <div>
-          <label for="method">Método HTTP</label>
-          <select id="method">
-            <option value="HEAD">HEAD (solo cabeceras)</option>
-            <option value="GET" selected>GET (descarga completa)</option>
-          </select>
-        </div>
-        <div>
-          <label for="total">Peticiones totales</label>
-          <input type="number" id="total" value="1000" min="10" max="50000" />
-        </div>
-        <div>
-          <label for="concurrency">Hilos concurrentes</label>
-          <input type="number" id="concurrency" value="50" min="1" max="500" />
-        </div>
-      </div>
+/* scrollbars de la consola */
+*{scrollbar-width:thin;scrollbar-color:#00b37c #0a1119}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#0a1119;border-left:1px solid #131c28}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#00e5a0,#00805a);border-radius:5px;border:2px solid #0a1119}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#5cffc8,#00b37c)}
+::-webkit-scrollbar-corner{background:#0a1119}
+.slim::-webkit-scrollbar{width:8px;height:8px}
 
-      <div class="buttons">
-        <button class="btn-start" id="btnStart">LANZAR RÁFAGA FIJA</button>
-        <button class="btn-ramp" id="btnRamp">MODO ESCALADA (HASTA ROMPER)</button>
-        <button class="btn-stop" id="btnStop" disabled>DETENER</button>
-      </div>
+/* ── fondo por capas ── */
+#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background:
+    repeating-linear-gradient(0deg,rgba(30,42,58,.22) 0 1px,transparent 1px 44px),
+    repeating-linear-gradient(90deg,rgba(30,42,58,.22) 0 1px,transparent 1px 44px);}
+.bg-glow{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(52vw 40vh at 18% -6%,rgba(0,229,160,.10),transparent 65%),
+    radial-gradient(46vw 38vh at 88% 4%,rgba(56,182,255,.07),transparent 65%),
+    radial-gradient(60vw 46vh at 50% 108%,rgba(176,108,255,.06),transparent 65%);
+  animation:glowDrift 26s ease-in-out infinite alternate;}
+@keyframes glowDrift{to{transform:translateY(-2.5%) scale(1.04)}}
+body::before{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.4;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 1px,transparent 1px 3px);}
+body::after{content:"";position:fixed;inset:0;z-index:61;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");}
 
-      <div class="progress-wrap">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-    </div>
+/* ── estructura ── */
+.shell{position:relative;z-index:10;max-width:1180px;margin:0 auto;padding:20px 22px 40px}
+header{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  border-bottom:1px solid var(--border);padding:10px 0 16px;margin-bottom:20px;
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand svg{width:38px;height:38px;flex:none;filter:drop-shadow(0 0 10px rgba(0,229,160,.5))}
+.brand h1{font-family:var(--disp);font-weight:700;font-size:clamp(1.05rem,2.6vw,1.45rem);letter-spacing:.1em;color:var(--accent);white-space:nowrap}
+.brand h1 i{font-style:normal;color:var(--dim)}
+.brand small{display:block;font-size:11px;color:var(--muted);letter-spacing:.22em}
+.head-right{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{background:var(--panel2);border:1px solid var(--border);padding:5px 11px;border-radius:4px;font-size:12px;color:var(--muted);white-space:nowrap}
+.badge b{color:var(--text);font-weight:400}
+.badge.h2 b{color:var(--accent)} .badge.h1 b{color:var(--warn)} .badge.bad b{color:var(--danger)}
+.led-wrap{display:inline-flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:5px 11px;font-size:12px;letter-spacing:.14em}
+.led{width:9px;height:9px;border-radius:50%;background:var(--dim)}
+.led-wrap[data-st=run] .led{background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 1s infinite}
+.led-wrap[data-st=run]{color:var(--accent)}
+.led-wrap[data-st=stop] .led{background:var(--warn);box-shadow:0 0 10px var(--warn)}
+.led-wrap[data-st=stop]{color:var(--warn)}
+.led-wrap[data-st=err] .led{background:var(--danger);box-shadow:0 0 10px var(--danger)}
+.led-wrap[data-st=err]{color:var(--danger)}
+@keyframes pulse{50%{opacity:.35}}
 
-    <div class="panel">
-      <div class="stats-grid">
-        <div class="stat"><div class="stat-label">Completadas</div><div class="stat-val" id="stDone">0 / 0</div></div>
-        <div class="stat"><div class="stat-label">RPS (Req/s)</div><div class="stat-val ok" id="stRps">0.0</div></div>
-        <div class="stat"><div class="stat-label">Éxitos (2xx)</div><div class="stat-val ok" id="stOk">0</div></div>
-        <div class="stat"><div class="stat-label">Errores / Timeout</div><div class="stat-val err" id="stErr">0</div></div>
-        <div class="stat"><div class="stat-label">Latencia Media</div><div class="stat-val" id="stAvg">0 ms</div></div>
-        <div class="stat"><div class="stat-label">Percentil 95 (P95)</div><div class="stat-val" id="stP95">0 ms</div></div>
-        <div class="stat"><div class="stat-label">Mín / Máx</div><div class="stat-val" id="stMinMax">0 / 0 ms</div></div>
-        <div class="stat"><div class="stat-label">Concurrencia Actual</div><div class="stat-val" id="stConc">0</div></div>
-      </div>
-    </div>
+/* ── paneles HUD ── */
+.panel{
+  position:relative;background:linear-gradient(180deg,var(--panel),#0b1119);
+  border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;
+  box-shadow:0 10px 28px rgba(0,0,0,.4);
+}
+.panel::before,.panel::after{content:"";position:absolute;width:14px;height:14px;pointer-events:none}
+.panel::before{top:-1px;left:-1px;border-top:2px solid var(--accent);border-left:2px solid var(--accent);border-top-left-radius:8px;opacity:.7}
+.panel::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--accent);border-right:2px solid var(--accent);border-bottom-right-radius:8px;opacity:.7}
+.p-title{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.p-idx{font-family:var(--disp);font-weight:700;color:var(--accent);font-size:13px;letter-spacing:.1em}
+.p-title h2{font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.2em;text-transform:uppercase}
+.p-meta{margin-left:auto;font-size:11.5px;color:var(--dim);letter-spacing:.1em}
 
-    <div id="log"></div>
-  </div>
+/* ── controles ── */
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:12px}
+.controls .fld-path{grid-column:span 2}
+@media (max-width:560px){.controls .fld-path{grid-column:span 1}}
+label{display:block;font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px}
+input,select{
+  width:100%;background:var(--inset);border:1px solid var(--border);color:var(--text);
+  padding:9px 11px;border-radius:5px;font-family:var(--mono);font-size:14px;
+  transition:border-color .15s,box-shadow .15s;
+}
+input:hover,select:hover{border-color:var(--border2)}
+input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,229,160,.14)}
+input::placeholder{color:var(--dim)}
+select{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:32px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300e5a0' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 11px center;}
+.presets{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}
+.preset{font-family:var(--mono);font-size:11.5px;color:var(--muted);background:var(--inset);border:1px solid var(--border);border-radius:999px;padding:3px 11px;cursor:pointer;transition:all .15s}
+.preset:hover{color:var(--accent);border-color:var(--accent);box-shadow:0 0 8px rgba(0,229,160,.2)}
+.opt-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.tgl{display:inline-flex;align-items:center;gap:9px;cursor:pointer;user-select:none}
+.tgl input{position:absolute;opacity:0;width:0}
+.tgl .track{width:40px;height:20px;border-radius:999px;background:var(--inset);border:1px solid var(--border);position:relative;transition:all .2s;flex:none}
+.tgl .track::after{content:"";position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--dim);transition:all .2s}
+.tgl input:checked + .track{border-color:var(--accent);background:rgba(0,229,160,.12)}
+.tgl input:checked + .track::after{left:22px;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.tgl input:focus-visible + .track{outline:2px solid var(--accent);outline-offset:2px}
+.tgl span.t{font-size:12px;color:var(--muted);letter-spacing:.1em}
+.probe-chip{font-size:12px;padding:5px 12px;border-radius:4px;border:1px solid var(--border);background:var(--inset);color:var(--dim)}
+.probe-chip.ok{color:var(--accent);border-color:rgba(0,229,160,.4)}
+.probe-chip.err{color:var(--danger);border-color:rgba(255,77,94,.45)}
+.proto-note{font-size:12px;color:var(--muted);background:var(--inset);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:5px;padding:9px 13px;margin-bottom:12px}
+.proto-note.warn{border-left-color:var(--warn)}
+.proto-note b{color:var(--text);font-weight:400}
+.ramp-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;align-items:end;background:rgba(255,176,46,.04);border:1px dashed rgba(255,176,46,.3);border-radius:6px;padding:12px;margin-bottom:14px}
+.ramp-row .ramp-lbl{grid-column:1/-1;font-size:11px;color:var(--warn);letter-spacing:.2em}
+#rampPreview{grid-column:1/-1;font-size:11.5px;color:var(--dim)}
 
-  <script>
-    const $ = id => document.getElementById(id);
-    $('targetDisplay').textContent = `Origen: ${window.location.origin}`;
+/* ── botones ── */
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+button{cursor:pointer;border:none;font-family:var(--disp);font-weight:700;letter-spacing:.08em;transition:filter .15s,transform .1s,box-shadow .2s}
+button:disabled{opacity:.35;cursor:not-allowed;filter:grayscale(.4)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{padding:11px 18px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;gap:9px;text-transform:uppercase}
+.btn svg{width:15px;height:15px;flex:none}
+.btn:hover:not(:disabled){filter:brightness(1.15);transform:translateY(-1px)}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn-start{background:var(--accent);color:#04130d;box-shadow:0 0 16px rgba(0,229,160,.25)}
+.btn-ramp{background:var(--warn);color:#1a1000;box-shadow:0 0 16px rgba(255,176,46,.2)}
+.btn-sustain{background:var(--blue);color:#03121f;box-shadow:0 0 16px rgba(56,182,255,.2)}
+.btn-stop{background:var(--danger);color:#fff;box-shadow:0 0 16px rgba(255,77,94,.25)}
+.btn-ghost{background:var(--panel2);color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.btn-sm{padding:7px 12px;font-size:11.5px}
 
-    let abortController = null;
-    let running = false;
-
-    function addLog(msg, cls = '') {
-      const line = document.createElement('div');
-      if (cls) line.className = cls;
-      const time = new Date().toLocaleTimeString('es-ES', { hour12: false });
-      line.textContent = `[${time}] ${msg}`;
-      $('log').prepend(line);
-    }
-
-    function updateStats(done, total, ok, err, latencies, startTime, conc) {
-      const elapsed = (performance.now() - startTime) / 1000;
-      const rps = elapsed > 0 ? (done / elapsed).toFixed(1) : '0.0';
-      $('stDone').textContent = `${done} / ${total}`;
-      $('stRps').textContent = rps;
-      $('stOk').textContent = ok;
-      $('stErr').textContent = err;
-      $('stConc').textContent = conc;
-      $('progressBar').style.width = total > 0 ? `${Math.min(100, (done / total) * 100)}%` : '100%';
-
-      if (latencies.length > 0) {
-        const sorted = [...latencies].sort((a, b) => a - b);
-        const sum = sorted.reduce((a, b) => a + b, 0);
-        const avg = (sum / sorted.length).toFixed(1);
-        const p95 = sorted[Math.floor(sorted.length * 0.95)].toFixed(1);
-        const min = sorted[0].toFixed(1);
-        const max = sorted[sorted.length - 1].toFixed(1);
-        $('stAvg').textContent = `${avg} ms`;
-        $('stP95').textContent = `${p95} ms`;
-        $('stMinMax').textContent = `${min} / ${max}`;
-      }
-    }
-
-    async function fireOne(url, method, signal) {
-      const t0 = performance.now();
-      const bustUrl = `${url}${url.includes('?') ? '&' : '?'}_t=${Math.random().toString(36).slice(2)}`;
-      const res = await fetch(bustUrl, { method, cache: 'no-store', signal });
-      await res.arrayBuffer();
-      const dt = performance.now() - t0;
-      return { ok: res.ok, status: res.status, dt };
-    }
-
-    async function runBatch(total, concurrency) {
-      running = true;
-      abortController = new AbortController();
-      $('btnStart').disabled = true;
-      $('btnRamp').disabled = true;
-      $('btnStop').disabled = false;
-
-      const endpoint = $('endpoint').value.trim() || '/';
-      const method = $('method').value;
-      let launched = 0, done = 0, ok = 0, err = 0;
-      const latencies = [];
-      const startTime = performance.now();
-
-      addLog(`Iniciando ráfaga: ${total} peticiones (${method} ${endpoint}) con ${concurrency} hilos...`, 'log-warn');
-
-      async function worker() {
-        while (running && launched < total) {
-          launched++;
-          try {
-            const res = await fireOne(endpoint, method, abortController.signal);
-            done++;
-            if (res.ok) {
-              ok++;
-              latencies.push(res.dt);
-            } else {
-              err++;
-              if (err <= 5) addLog(`HTTP ${res.status} recibido`, 'log-err');
-            }
-          } catch (e) {
-            if (!running) break;
-            done++;
-            err++;
-            if (err <= 5) addLog(`Fallo de red/timeout: ${e.message}`, 'log-err');
-          }
-          if (done % 10 === 0 || done === total) {
-            updateStats(done, total, ok, err, latencies, startTime, concurrency);
-          }
-        }
-      }
-
-      const workers = Array.from({ length: concurrency }, () => worker());
-      await Promise.all(workers);
-
-      updateStats(done, total, ok, err, latencies, startTime, concurrency);
-      const totalSec = ((performance.now() - startTime) / 1000).toFixed(2);
-      addLog(`Finalizado en ${totalSec}s -> ${ok} OK | ${err} fallos | ${(done / totalSec).toFixed(1)} req/s`, err > 0 ? 'log-warn' : 'log-ok');
-
-      running = false;
-      $('btnStart').disabled = false;
-      $('btnRamp').disabled = false;
-      $('btnStop').disabled = true;
-    }
-
-    async function runRamp() {
-      const levels = [10, 25, 50, 100, 150, 250, 400];
-      addLog('Iniciando escalada progresiva de concurrencia...', 'log-warn');
-      for (const conc of levels) {
-        if (!running && conc !== levels[0]) break;
-        const reqs = conc * 8;
-        $('concurrency').value = conc;
-        $('total').value = reqs;
-        await runBatch(reqs, conc);
-        const errors = parseInt($('stErr').textContent, 10);
-        if (errors > 0) {
-          addLog(`Límite detectado en concurrencia x${conc} (${errors} errores). Escalada detenida.`, 'log-err');
-          break;
-        }
-        await new Promise(r => setTimeout(r, 600));
-        if ($('btnStop').disabled && conc !== levels[levels.length - 1]) break;
-      }
-    }
-
-    $('btnStart').addEventListener('click', () => {
-      const total = Math.max(1, parseInt($('total').value, 10) || 500);
-      const conc = Math.max(1, parseInt($('concurrency').value, 10) || 20);
-      runBatch(total, conc);
-    });
-
-    $('btnRamp').addEventListener('click', () => {
-      running = true;
-      runRamp();
-    });
-
-    $('btnStop').addEventListener('click', () => {
-      running = false;
-      if (abortController) abortController.abort();
-      addLog('Prueba abortada manualmente.', 'log-err');
-      $('btnStart').disabled = false;
-      $('btnRamp').disabled = false;
-      $('btnStop').disabled = true;
-    });
-  </script>
-</body>
-</html>
+/* ── progreso ── */
+.progress-head{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:7px}
+#modeChip{color:var(--accent);letter-spacing:.12em}
+.progress-head .right{margin-left:auto;display:flex;gap:14px}
+.progress-wrap{width:100%;height:10px;background:var(--inset);border:1px solid var(--border);border-radius:5px;overflow:hidden;position:relative}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .15s linear;box-shadow:0 0 12px rgba(0,229,160,.5)}
+.progress-wrap::after{
